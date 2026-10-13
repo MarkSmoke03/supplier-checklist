@@ -138,6 +138,8 @@ details p{font-size:.9rem;color:var(--muted);padding-top:8px;max-width:60ch}
 .score-ring .num small{font-size:.78rem;color:var(--muted);margin-top:4px}
 .band{font-size:1.35rem;font-weight:850;letter-spacing:-.02em}
 .score .sub{color:var(--muted);font-size:.88rem}
+.capnote{font-size:.82rem;font-weight:700;color:var(--no);background:var(--no-soft);border-radius:999px;padding:4px 12px}
+.scope{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
 .counts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .count{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 6px;display:grid;justify-items:center;gap:2px;font-size:.72rem;color:var(--muted);text-align:center}
 .count b{font-size:1.4rem;font-weight:850;font-variant-numeric:tabular-nums;line-height:1.1}
@@ -199,7 +201,8 @@ footer{display:grid;gap:8px;font-size:.8rem;color:var(--faint);padding-top:8px}
 var CONFIG = {
   name: "Mark Chushi",
   whatsapp: "260964293572",   /* international format, digits only, e.g. "260971234567" */
-  brand: ""       /* optional business name for the call to action */
+  brand: "",      /* optional business name for the call to action */
+  goatcounter: "" /* optional GoatCounter site code, e.g. "supplierchecklist". Empty = no visitor counting */
 };
 /* ==================================== */
 
@@ -381,7 +384,9 @@ function compute(){
   });
   r.pct = r.max ? Math.round(r.pts / r.max * 100) : 0;
   r.answered = r.yes + r.prog + r.no + r.na;
+  r.capped = r.blockers.length > 0;
   if(r.answered===0) r.band = "Not started";
+  else if(r.capped) r.band = "Not ready yet";
   else if(r.pct===100) r.band = "Ready to apply";
   else if(r.pct>=80) r.band = "Nearly ready";
   else if(r.pct>=50) r.band = "Getting there";
@@ -390,7 +395,7 @@ function compute(){
   r.missing.sort(sort); r.progress.sort(sort);
   return r;
 }
-function ringClass(r){ return r.answered===0 ? "s-none" : r.pct>=80 ? "s-high" : r.pct>=50 ? "s-mid" : "s-low"; }
+function ringClass(r){ return r.answered===0 ? "s-none" : r.capped ? "s-low" : r.pct>=80 ? "s-high" : r.pct>=50 ? "s-mid" : "s-low"; }
 function ring(r,size,stroke){
   var c = size/2, rad = (size-stroke)/2, len = 2*Math.PI*rad, off = len*(1-r.pct/100);
   return '<svg class="ring '+ringClass(r)+'" width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" aria-hidden="true">'
@@ -464,7 +469,9 @@ function firstOpenStep(){ for(var k=0;k<CATS.length;k++){ if(answeredIn(CATS[k].
 function resultsHTML(){
   var r = compute(), h = '<section class="screen">';
   h += '<div class="panel score"><div class="score-ring">'+ring(r,176,14)+'<div class="num"><b>'+r.pct+'%</b><small>ready</small></div></div>'
-     + '<p class="band">'+esc(r.band)+'</p><p class="sub">'+(company?esc(company)+' &middot; ':'')+r.answered+' of '+r.total+' answered</p></div>';
+     + '<p class="band">'+esc(r.band)+'</p>'
+     + (r.capped ? '<p class="capnote">Capped because '+r.blockers.length+' commonly required '+(r.blockers.length===1?'item is':'items are')+' missing</p>' : '')
+     + '<p class="sub">'+(company?esc(company)+' &middot; ':'')+r.answered+' of '+r.total+' answered</p></div>';
   h += '<div class="counts"><div class="count c-yes"><b>'+r.yes+'</b>Ready</div><div class="count c-prog"><b>'+r.prog+'</b>In progress</div><div class="count c-no"><b>'+r.no+'</b>Missing</div><div class="count c-open"><b>'+r.open+'</b>Unanswered</div></div>';
   if(r.blockers.length) h += '<p class="blocker"><b>'+r.blockers.length+' commonly required '+(r.blockers.length===1?'item is':'items are')+' missing.</b> Most buyers will not accept a registration without '+(r.blockers.length===1?'it':'these')+', so start there.</p>';
   if(r.answered===0){
@@ -476,16 +483,20 @@ function resultsHTML(){
     if(r.open) h += '<div class="panel"><p class="empty">'+r.open+' item'+(r.open===1?' is':'s are')+' unanswered and count as zero in your score.</p><button class="btn outline" type="button" data-go="open">Answer the rest'+ICONS.next+'</button></div>';
   }
   h += '<p class="method">How the score works: Yes counts in full, In progress counts half, No counts zero. Commonly required items count double. Items marked Not relevant are left out.</p>';
-  h += '<div class="panel"><div class="row"><button class="btn primary" id="copyBtn" type="button">'+ICONS.copy+'Copy my results</button>'
-     + '<a class="btn outline" id="waShare" href="https://wa.me/?text='+encodeURIComponent(resultsText(r))+'" target="_blank" rel="noopener">'+ICONS.wa+'Send on WhatsApp</a></div>'
+  var num = CONFIG.whatsapp.replace(/\D/g,""), first = CONFIG.name.split(" ")[0];
+  h += '<div class="panel">'
+     + (num && r.answered ? '<a class="btn primary block" id="sendMark" href="https://wa.me/'+num+'?text='+encodeURIComponent(leadText(r))+'" target="_blank" rel="noopener">'+ICONS.wa+'Send my results to '+esc(first)+'</a>' : '')
+     + '<div class="row"><button class="btn outline" id="copyBtn" type="button">'+ICONS.copy+'Copy my results</button>'
+     + '<a class="btn outline" id="waShare" href="https://wa.me/?text='+encodeURIComponent(resultsText(r))+'" target="_blank" rel="noopener">'+ICONS.wa+'Share with someone</a></div>'
      + '<p class="status" id="copyStatus" role="status"></p><textarea id="fallback" hidden readonly aria-label="Your results as text"></textarea>'
      + '<div class="row"><button class="btn quiet" id="resetBtn" type="button">Clear all answers</button></div>'
      + '<div class="confirm" id="confirmReset" hidden><span>Clear all answers on this phone?</span><button class="btn quiet" id="resetYes" type="button">Yes, clear</button><button class="btn quiet" id="resetNo" type="button">Cancel</button></div></div>';
-  var num = CONFIG.whatsapp.replace(/\D/g,""), who = CONFIG.brand ? CONFIG.brand + " (" + CONFIG.name + ")" : CONFIG.name;
-  h += '<div class="cta"><span class="eyebrow">Need help?</span><h2>Want us to prepare your registration pack?</h2>'
-     + '<p>We help small Zambian contractors and suppliers gather, check and organise their documents for supplier registration and tenders.</p>'
-     + '<div class="contact">Contact '+esc(who)+' on WhatsApp: '+(num ? '+'+num : '[WhatsApp number]')+'</div>'
-     + (num ? '<a class="btn primary" href="https://wa.me/'+num+'?text='+encodeURIComponent("Hi "+CONFIG.name.split(" ")[0]+", I used the Supplier Registration Readiness Checklist and would like help preparing my registration pack.")+'" target="_blank" rel="noopener">'+ICONS.wa+'Message '+esc(CONFIG.name.split(" ")[0])+' on WhatsApp</a>' : '')
+  var who = CONFIG.brand ? CONFIG.brand + " (" + CONFIG.name + ")" : CONFIG.name;
+  h += '<div class="cta"><span class="eyebrow">Need help?</span><h2>Want help preparing your registration pack?</h2>'
+     + '<p>I\'m '+esc(CONFIG.name)+'. I help small Zambian contractors and suppliers gather, check and organise their documents for supplier registration and tenders.</p>'
+     + '<div class="contact">WhatsApp '+esc(who)+': '+(num ? '+'+num : '[WhatsApp number]')+'</div>'
+     + (num ? '<a class="btn primary" href="https://wa.me/'+num+'?text='+encodeURIComponent(r.answered ? leadText(r) : "Hi "+first+", I found the Supplier Registration Readiness Checklist and would like help preparing my registration pack.")+'" target="_blank" rel="noopener">'+ICONS.wa+'Message '+esc(first)+' on WhatsApp</a>' : '')
+     + '<p class="scope">I prepare and organise documents. I don\'t issue certificates, and I don\'t give tax or legal advice.</p>'
      + '</div>';
   h += '<footer><p>A general preparation guide for Zambia, last reviewed October 2026. Not legal, tax or financial advice.</p><p>Regulators, certificates and rules change. Check current requirements with the issuing body (PACRA, ZRA, NAPSA, NHIMA, WCFCB, NCC and others) and with the buyer.</p></footer>';
   return h + '</section>';
@@ -501,6 +512,25 @@ function resultsText(r){
   L.push("", "_Preparation guide only, not an official requirements list. Confirm the exact list with the buyer._");
   if(/^https?:$/.test(location.protocol)) L.push("Free checklist: " + location.href.split("#")[0]);
   return L.join("\n");
+}
+
+function leadText(r){
+  r = r || compute();
+  var L = ["Hi " + CONFIG.name.split(" ")[0] + ", I used your Supplier Registration Readiness Checklist and would like help with my registration pack."];
+  if(company) L.push("Company: " + company);
+  L.push("Score: " + r.pct + "% (" + r.band + "), " + r.answered + " of " + r.total + " answered");
+  if(r.missing.length){ L.push("", "Missing:"); r.missing.forEach(function(i){ L.push("- " + i.t); }); }
+  if(r.progress.length){ L.push("", "In progress:"); r.progress.forEach(function(i){ L.push("- " + i.t); }); }
+  return L.join("\n");
+}
+
+function loadCounter(){
+  var code = (CONFIG.goatcounter || "").replace(/[^a-z0-9-]/gi,"");
+  if(!code || !/^https?:$/.test(location.protocol)) return;
+  var s = document.createElement("script");
+  s.async = true; s.src = "https://gc.zgo.at/count.js";
+  s.setAttribute("data-goatcounter", "https://" + code + ".goatcounter.com/count");
+  document.body.appendChild(s);
 }
 
 function go(n, focus){
@@ -558,6 +588,7 @@ document.addEventListener("input", function(e){ if(e.target.id==="company"){ com
 
 load();
 go(cur, false);
+loadCounter();
 </script>
 </body>
 </html>

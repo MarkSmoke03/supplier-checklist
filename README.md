@@ -14,6 +14,7 @@ This is a preparation guide, not an official requirements list. Every buyer sets
 Everything lives in `index.html`.
 
 - **Contact details:** edit the `CONFIG` block at the top of the script (`whatsapp` takes digits only, international format, e.g. `260971234567`).
+- **Visitor count (optional):** create a free GoatCounter site and put its code in `goatcounter`. Leave it empty for no counting.
 - **Checklist items:** edit the `ITEMS` array. Each item has a section (`cat`), a tag (`common` or `buyer`), a title, a "What is this?" note (`why`) and a next step (`next`). Add `na:true` to allow "Not relevant".
 
 ## Hosting
