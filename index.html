@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1319">
+<title>Supplier Registration Readiness Checklist</title>
+<meta name="description" content="Free checklist for Zambian contractors and suppliers. Check your documents, get a readiness score, and see what to do next for each gap.">
+<meta property="og:title" content="Supplier Registration Readiness Checklist">
+<meta property="og:description" content="Free checklist for Zambian contractors and suppliers. Check your documents, get a readiness score, and see what to do next for each gap.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230E1319'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%232A3542' stroke-width='4'/%3E%3Cpath d='M16 6a10 10 0 0 1 9.5 13' fill='none' stroke='%23E9874B' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+/* Layout: phone-first app shell. Sticky top bar (mini score ring + section chips), one screen per step, fixed bottom Back/Next bar. Dark-only by design. System fonts: zero font downloads on slow data. */
+:root{
+  --bg:#0E1319; --surface:#161D25; --raised:#1E2731; --line:#2A3542; --ink:#EDF1F5; --muted:#8C99A8; --faint:#5B6877;
+  --copper:#E9874B; --copper-ink:#1B1008; --copper-soft:rgba(233,135,75,.14);
+  --yes:#3DDC8F; --yes-soft:rgba(61,220,143,.12);
+  --prog:#F6C445; --prog-soft:rgba(246,196,69,.12);
+  --no:#FF6B6B; --no-soft:rgba(255,107,107,.12);
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --r:14px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;padding-top:env(safe-area-inset-top,0px)}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--copper);outline-offset:2px}
+.wrap{max-width:40rem;margin:0 auto;padding-inline:16px}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:12px;padding-block:10px}
+.brand{flex:1;min-width:0;display:grid;line-height:1.2}
+.brand b{font-size:.95rem;font-weight:800;letter-spacing:-.01em}
+.brand span{font-size:.78rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 12px 4px 4px;cursor:pointer;text-decoration:none;color:var(--ink)}
+.mini .pct{font-weight:800;font-variant-numeric:tabular-nums;font-size:.95rem;min-width:3.2ch}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-block:0 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:transparent;border-radius:999px;padding:5px 11px;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--faint)}
+.chip.part .dot{background:var(--prog)}
+.chip.done .dot{background:var(--yes)}
+.chip[aria-current="step"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip.res{color:var(--copper);border-color:var(--copper)}
+.chip.res[aria-current="step"]{background:var(--copper);color:var(--copper-ink)}
+
+/* ---------- ring ---------- */
+.ring .track{stroke:var(--line)}
+.ring .val{transition:stroke-dashoffset .5s ease,stroke .3s}
+.ring.s-none .val{stroke:var(--faint)} .ring.s-low .val{stroke:var(--no)} .ring.s-mid .val{stroke:var(--prog)} .ring.s-high .val{stroke:var(--yes)}
+@media (prefers-reduced-motion:reduce){.ring .val{transition:none}}
+
+/* ---------- screens ---------- */
+main{padding-block:22px 120px}
+.screen{display:grid;gap:18px}
+.eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--copper)}
+.lede{color:var(--muted);max-width:58ch}
+
+/* intro */
+.hero{display:grid;gap:12px;padding-block:8px 4px}
+.hero h1{font-size:clamp(1.9rem,8vw,2.6rem);line-height:1.05;font-weight:850;letter-spacing:-.03em}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.85rem;color:var(--muted)}
+.fact b{color:var(--ink)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px}
+.warn{background:var(--copper-soft);border:1px solid rgba(233,135,75,.35);border-radius:var(--r);padding:14px 16px;font-size:.92rem;color:var(--ink)}
+.warn b{color:var(--copper)}
+.field{display:grid;gap:6px}
+.field label{font-weight:700;font-size:.9rem}
+.field small{color:var(--muted);font-size:.8rem}
+.field input{font:inherit;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);width:100%}
+.field input::placeholder{color:var(--faint)}
+.legend{display:grid;gap:8px;font-size:.88rem;color:var(--muted)}
+.legend div{display:flex;gap:10px;align-items:flex-start}
+.legend .tag{margin-top:2px}
+
+/* tags */
+.tag{display:inline-flex;justify-self:start;align-items:center;font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:6px;white-space:nowrap;flex:none}
+.tag.common{background:var(--raised);color:var(--ink)}
+.tag.buyer{border:1px dashed var(--faint);color:var(--muted)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:12px 20px;border-radius:12px;border:1px solid transparent;font-weight:800;font-size:1rem;cursor:pointer;text-decoration:none;background:var(--raised);color:var(--ink)}
+.btn.primary{background:var(--copper);color:var(--copper-ink)}
+.btn.outline{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn.quiet{background:transparent;color:var(--muted);min-height:44px;padding-inline:12px;font-weight:600;font-size:.92rem}
+.btn.block{width:100%}
+.btn svg{flex:none}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+
+/* category screen */
+.step-head{display:grid;gap:6px}
+.step-head h2{font-size:clamp(1.5rem,6.5vw,2rem);line-height:1.1;font-weight:850;letter-spacing:-.025em}
+.step-meta{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.answered{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);border-radius:4px;transition:width .3s}
+ul.items{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px}
+.item-head{display:grid;gap:8px}
+.item h3{font-size:1.02rem;font-weight:700;line-height:1.35}
+.ans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border:0;margin:0;padding:0;min-width:0}
+.ans.four{grid-template-columns:repeat(4,1fr)}
+.ans legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ans input{position:absolute;opacity:0;pointer-events:none}
+.ans label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:58px;padding:8px 4px;border-radius:11px;background:var(--raised);border:1.5px solid transparent;color:var(--muted);font-size:.8rem;font-weight:700;text-align:center;line-height:1.1;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.ans label svg{width:20px;height:20px}
+.ans input:focus-visible + label{outline:3px solid var(--copper);outline-offset:2px}
+.ans input[value="yes"]:checked + label{background:var(--yes-soft);border-color:var(--yes);color:var(--yes)}
+.ans input[value="prog"]:checked + label{background:var(--prog-soft);border-color:var(--prog);color:var(--prog)}
+.ans input[value="no"]:checked + label{background:var(--no-soft);border-color:var(--no);color:var(--no)}
+.ans input[value="na"]:checked + label{background:var(--bg);border-color:var(--muted);color:var(--ink)}
+details summary{cursor:pointer;color:var(--muted);font-size:.85rem;font-weight:600;list-style:none;display:inline-flex;align-items:center;gap:6px}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"+";display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;border:1px solid var(--faint);font-size:.8rem;line-height:1}
+details[open] summary::before{content:"\2212"}
+details p{font-size:.9rem;color:var(--muted);padding-top:8px;max-width:60ch}
+
+/* bottom bar */
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--bg);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.bottom-in{display:flex;gap:10px;padding-block:10px}
+.bottom .btn.outline{flex:none;padding-inline:16px}
+.bottom .btn.primary{flex:1;min-width:0}
+.bottom .btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* results */
+.score{display:grid;justify-items:center;text-align:center;gap:6px;padding:22px 16px 18px}
+.score-ring{position:relative;width:176px;height:176px}
+.score-ring .num{position:absolute;inset:0;display:grid;place-content:center;line-height:1}
+.score-ring .num b{font-size:3rem;font-weight:850;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.score-ring .num small{font-size:.78rem;color:var(--muted);margin-top:4px}
+.band{font-size:1.35rem;font-weight:850;letter-spacing:-.02em}
+.score .sub{color:var(--muted);font-size:.88rem}
+.counts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.count{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 6px;display:grid;justify-items:center;gap:2px;font-size:.72rem;color:var(--muted);text-align:center}
+.count b{font-size:1.4rem;font-weight:850;font-variant-numeric:tabular-nums;line-height:1.1}
+.count.c-yes b{color:var(--yes)} .count.c-prog b{color:var(--prog)} .count.c-no b{color:var(--no)} .count.c-open b{color:var(--ink)}
+.blocker{background:var(--no-soft);border:1px solid rgba(255,107,107,.4);border-radius:var(--r);padding:14px 16px;font-size:.92rem}
+.blocker b{color:var(--no)}
+.method{font-size:.8rem;color:var(--faint)}
+.gap-group{display:grid;gap:10px}
+.gap-group h3{font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:8px}
+.gap-group h3 .pill{font-size:.75rem;font-weight:800;padding:2px 8px;border-radius:999px;font-variant-numeric:tabular-nums}
+.g-no .pill{background:var(--no-soft);color:var(--no)} .g-prog .pill{background:var(--prog-soft);color:var(--prog)}
+.gap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
+.gap .ic{grid-row:span 3;width:28px;height:28px;border-radius:50%;display:grid;place-items:center}
+.g-no .gap .ic{background:var(--no-soft);color:var(--no)} .g-prog .gap .ic{background:var(--prog-soft);color:var(--prog)}
+.gap .ic svg{width:16px;height:16px}
+.gap-t{font-weight:700;line-height:1.35;min-width:0}
+.gap-c{font-size:.78rem;color:var(--faint);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.gap-n{font-size:.9rem;color:var(--muted);min-width:0}
+.gap-n b{color:var(--ink)}
+.empty{color:var(--muted);font-size:.92rem}
+.status{font-size:.88rem;min-height:1.3em;color:var(--yes)}
+.status.err{color:var(--muted)}
+textarea#fallback{width:100%;min-height:12rem;font:inherit;font-size:.85rem;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem;color:var(--muted)}
+.cta{background:linear-gradient(160deg,#2A1C13 0%,var(--surface) 70%);border:1px solid rgba(233,135,75,.4);border-radius:18px;padding:22px 18px;display:grid;gap:12px}
+.cta h2{font-size:1.45rem;font-weight:850;line-height:1.15;letter-spacing:-.02em}
+.cta p{color:var(--muted)}
+.contact{font-family:var(--mono);font-size:.95rem;background:var(--bg);border:1px solid var(--line);padding:12px 14px;border-radius:10px;user-select:all;word-break:break-word}
+footer{display:grid;gap:8px;font-size:.8rem;color:var(--faint);padding-top:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:360px){.ans label{font-size:.72rem}.count b{font-size:1.2rem}}
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <div class="top-in">
+      <div class="brand"><b>Readiness check</b><span id="topSub">Supplier registration, Zambia</span></div>
+      <button class="mini" id="miniScore" type="button" aria-label="Go to results"></button>
+    </div>
+    <nav class="chips" id="chips" aria-label="Sections"></nav>
+  </div>
+</header>
+
+<main class="wrap" id="main" tabindex="-1"></main>
+
+<div class="bottom" id="bottom" hidden>
+  <div class="wrap bottom-in">
+    <button class="btn outline" id="backBtn" type="button" aria-label="Previous section"></button>
+    <button class="btn primary" id="nextBtn" type="button"></button>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+
+<script>
+/* ============ EDIT THESE ============ */
+var CONFIG = {
+  name: "Mark Chushi",
+  whatsapp: "",   /* international format, digits only, e.g. "260971234567" */
+  brand: ""       /* optional business name for the call to action */
+};
+/* ==================================== */
+
+var CATS = [
+  {id:"co", name:"Company registration and ownership", intro:"Proof the company exists, who owns it and who can sign for it."},
+  {id:"tax", name:"Tax and statutory compliance", intro:"Certificates showing you are up to date with ZRA and the social security bodies."},
+  {id:"sec", name:"Sector registrations", intro:"Only some of these apply to you. Mark the rest Not relevant."},
+  {id:"she", name:"Health, safety and environment", intro:"Mining buyers look closely at this section."},
+  {id:"ins", name:"Insurance", intro:"Cover types and amounts are set by the buyer and the contract."},
+  {id:"fin", name:"Financial", intro:"Evidence that you can be paid safely and can carry the work."},
+  {id:"cap", name:"Capability and references", intro:"Proof you can actually do the work."},
+  {id:"pack", name:"Your document pack", intro:"How your documents look and fit together when you submit."}
+];
+
+/* tag: common = commonly required, buyer = check with the buyer. na: item can be marked Not relevant. */
+var ITEMS = [
+  {id:"inc",cat:"co",tag:"common",t:"Certificate of Incorporation (PACRA)",
+   why:"Issued by PACRA when the company was registered. Almost every buyer asks for a copy.",
+   next:"Find the original and scan it in colour. If it is lost, request a certified copy from PACRA."},
+  {id:"printout",cat:"co",tag:"common",t:"Current PACRA printout showing directors and shareholders",
+   why:"Shows who the directors and shareholders are today. Buyers use it to check ownership and to confirm who they are dealing with.",
+   next:"Request a current printout from PACRA. Ask the buyer how recent it must be."},
+  {id:"returns",cat:"co",tag:"common",t:"Annual returns filed and up to date with PACRA",
+   why:"Unfiled annual returns can leave the company out of good standing, and a buyer's checks may show it.",
+   next:"Check your filing status with PACRA and file any outstanding annual returns before you apply."},
+  {id:"bo",cat:"co",tag:"buyer",t:"Beneficial ownership details declared with PACRA",
+   why:"Under the 2025 mining local content rules, mining companies report supplier beneficial ownership to the Ministry of Mines, so expect to be asked who ultimately owns and controls your company.",
+   next:"Confirm your beneficial ownership details are lodged and correct at PACRA, and prepare a one-page ownership summary that matches the printout."},
+  {id:"local",cat:"co",tag:"buyer",t:"Proof of Zambian ownership (citizen-owned or citizen-empowered)",
+   why:"Statutory Instrument No. 68 of 2025 requires mining companies to reserve part of their procurement for local companies, defined under the Citizens Economic Empowerment Act: citizen-owned (majority Zambian shareholding) or citizen-empowered (25% to 50% Zambian). Buyers may ask you to prove which you are.",
+   next:"Use your PACRA shareholding printout and directors' NRCs as evidence. Ask the buyer exactly what proof they accept, including whether they want a certificate from the Citizens Economic Empowerment Commission (CEEC)."},
+  {id:"ids",cat:"co",tag:"common",t:"Certified copies of directors' NRCs or passports",
+   why:"Used to confirm the identity of the people who run the company.",
+   next:"Make clear colour copies of every director's NRC or passport, have them certified, and check none has expired."},
+  {id:"auth",cat:"co",tag:"buyer",t:"Board resolution or letter naming who signs for the company",
+   why:"Shows that the person filling in forms and signing contracts has the authority to do so.",
+   next:"Prepare a short resolution or letter on company letterhead, signed by the directors, naming the authorised signatory."},
+
+  {id:"tpin",cat:"tax",tag:"common",t:"ZRA TPIN registration",
+   why:"Your Taxpayer Identification Number from the Zambia Revenue Authority. It goes on almost every supplier form.",
+   next:"Find your TPIN registration confirmation. If the company is not registered, register on ZRA TaxOnline."},
+  {id:"tcc",cat:"tax",tag:"common",t:"Valid ZRA Tax Clearance Certificate",
+   why:"Confirms the company has filed its returns and paid what it owes. ZRA issues it for a charge year, so a certificate that expires on 31 December is invalid from 1 January. Current certificates carry a QR code that buyers can use to check them.",
+   next:"Log in to ZRA TaxOnline, file and pay anything outstanding, then apply for the certificate. Renew before year end so you are never without one."},
+  {id:"vat",cat:"tax",tag:"buyer",na:true,t:"VAT registration certificate (if you are VAT registered)",
+   why:"Asked for if you charge VAT. Since 2025, buyers can only claim input VAT on invoices issued through ZRA's Smart Invoice system.",
+   next:"Locate your VAT certificate and make sure you can issue Smart Invoices. If you are not VAT registered, mark this Not relevant and be ready to explain why."},
+  {id:"napsa",cat:"tax",tag:"common",t:"NAPSA compliance certificate",
+   why:"Shows you are registered as an employer and paying pension contributions for your workers.",
+   next:"Bring NAPSA returns and contributions up to date, then request a compliance certificate from NAPSA."},
+  {id:"nhima",cat:"tax",tag:"buyer",t:"NHIMA compliance certificate",
+   why:"Shows you register staff and pay national health insurance contributions. Some tenders list it next to NAPSA.",
+   next:"Bring NHIMA returns and contributions up to date, then request a compliance certificate from NHIMA."},
+  {id:"wcfcb",cat:"tax",tag:"common",t:"Workers' Compensation Fund Control Board compliance certificate",
+   why:"Shows the company is registered with the WCFCB and its assessments are paid.",
+   next:"Contact the WCFCB to register or settle assessments, then request a compliance certificate."},
+  {id:"trade",cat:"tax",tag:"buyer",t:"Council trading licence or business levy receipt",
+   why:"Issued by your local council. From 2025, renewing a trading licence needs a valid ZRA Tax Clearance Certificate.",
+   next:"Renew at your local council, taking your current tax clearance certificate with you."},
+
+  {id:"ncc",cat:"sec",tag:"common",na:true,t:"NCC registration certificate (construction work)",
+   why:"Contractors doing construction works register with the National Council for Construction, which grades them by category and size of work. NCC itself asks for NAPSA, workers' compensation and tax clearance proof.",
+   next:"Check your certificate is current and that its grade and category match the jobs you will bid for. Renew, or apply to upgrade, with NCC if not."},
+  {id:"eiz",cat:"sec",tag:"buyer",na:true,t:"EIZ registration (engineering firms and engineers)",
+   why:"Where your work involves engineering, buyers may ask for your firm's and your engineers' Engineering Institution of Zambia registration and practising licences.",
+   next:"Confirm which EIZ registrations apply to your firm and staff, and that practising licences are current."},
+  {id:"zppa",cat:"sec",tag:"buyer",na:true,t:"ZPPA supplier registration (government and parastatals)",
+   why:"Government bodies and parastatals buy under public procurement law, and many ask for registration with the Zambia Public Procurement Authority.",
+   next:"Register with ZPPA if you plan to supply government bodies or parastatals."},
+  {id:"otherlic",cat:"sec",tag:"buyer",na:true,t:"Other licences your service needs",
+   why:"Some work needs its own permit, for example a ZEMA licence for handling waste, or licences for fuel, transport or explosives.",
+   next:"List every licence your specific service needs and check each one is current. Ask the buyer which ones they will check."},
+
+  {id:"shepol",cat:"she",tag:"common",t:"Signed health and safety policy",
+   why:"Mining buyers expect a written policy, signed by the managing director, that reflects Zambia's Occupational Health and Safety Act, 2010 and your actual work.",
+   next:"Write a short policy that fits your work, have the managing director sign and date it, and display it at your premises."},
+  {id:"risk",cat:"she",tag:"common",t:"Risk assessments and safe work procedures for your main tasks",
+   why:"Shows you have thought through the hazards of the work you do, such as working at height, hot work or lifting.",
+   next:"Write a risk assessment and a step-by-step procedure for each main task. Make them specific to your work, not copied templates."},
+  {id:"safetyofficer",cat:"she",tag:"buyer",t:"Named safety officer or responsible person",
+   why:"Buyers want to know who manages safety on your jobs and what training they hold.",
+   next:"Appoint someone in writing and keep their training certificates on file."},
+  {id:"incidents",cat:"she",tag:"buyer",t:"Incident register and safety record",
+   why:"Many supplier forms ask for your incident history. An honest record is better than a blank page.",
+   next:"Start an incident register now. If you have had no incidents, say so in a signed statement."},
+  {id:"medical",cat:"she",tag:"buyer",t:"Medical fitness certificates for workers going onto mine sites",
+   why:"Mines often require workers to be certified medically fit before working on site. In Zambia this is linked to the Occupational Health and Safety Institute.",
+   next:"Ask the mine which medical certificates it requires and book your workers' examinations early."},
+  {id:"training",cat:"she",tag:"buyer",t:"Training and competency records",
+   why:"Site inductions, trade certificates and licences for welders, riggers, plant operators and drivers show your people are qualified.",
+   next:"Collect each worker's certificates and licences in one folder, with expiry dates noted."},
+
+  {id:"pl",cat:"ins",tag:"buyer",t:"Public liability insurance",
+   why:"Covers injury or damage to others caused by your work. Buyers often set a minimum amount of cover.",
+   next:"Ask the buyer for the minimum cover they require, then get quotes from an insurer or broker."},
+  {id:"otherins",cat:"ins",tag:"buyer",t:"Insurance that matches your work",
+   why:"For example contractor's all risks, motor, or goods in transit. The right cover depends on your work and the contract.",
+   next:"Ask the buyer which policies and amounts they need, then have a broker match them."},
+
+  {id:"bank",cat:"fin",tag:"common",t:"Bank confirmation letter for a company account",
+   why:"A letter on the bank's letterhead confirming the account is in the company's name. Buyers use it to pay you safely.",
+   next:"Request a confirmation letter from your branch. The account name must match your PACRA name exactly."},
+  {id:"fs",cat:"fin",tag:"common",t:"Recent financial statements (audited or certified)",
+   why:"Buyers use them to judge whether you can carry the work. Some ask for statements less than two years old.",
+   next:"Ask your accountant to prepare and sign statements for the last financial year. If the company is new, prepare management accounts and say so."},
+  {id:"capacity",cat:"fin",tag:"buyer",t:"Proof of financial capacity",
+   why:"For bigger jobs, buyers check you can buy materials and pay staff before you are paid. Recent bank statements or a credit facility letter are typical.",
+   next:"Prepare recent bank statements and any credit facility or supplier credit letters."},
+
+  {id:"profile",cat:"cap",tag:"common",t:"Company profile",
+   why:"Your first impression: who you are, what you do, your people, equipment, past work and contact details.",
+   next:"Write a short profile with only true, checkable claims, focused on the services this buyer actually buys."},
+  {id:"refs",cat:"cap",tag:"common",t:"Reference letters from past clients",
+   why:"Buyers often ask for two or three, on the client's letterhead, signed, with a contact person.",
+   next:"Ask past clients for signed letters naming the work, the date and a contact person. Only list clients who have agreed."},
+  {id:"projects",cat:"cap",tag:"common",t:"List of completed jobs with evidence",
+   why:"Client, dates, scope and value, backed by completion certificates, purchase orders or photos.",
+   next:"Build a simple table of past jobs and keep the evidence for each one together."},
+  {id:"cvs",cat:"cap",tag:"common",t:"CVs and qualifications of key staff",
+   why:"Shows the people who will do the work are qualified for it.",
+   next:"Collect short CVs and certificate copies for your managers, supervisors and technical staff."},
+  {id:"equip",cat:"cap",tag:"buyer",t:"Equipment and vehicle list",
+   why:"What you own and what you hire, with proof of ownership or hire agreements.",
+   next:"List each item with make, capacity and condition, and whether it is owned or hired. Keep ownership papers ready."},
+  {id:"office",cat:"cap",tag:"buyer",t:"Proof of a physical business address",
+   why:"Some buyers check that you operate from a real, traceable address.",
+   next:"Prepare a lease or title document and a recent utility bill for the business address."},
+
+  {id:"decl",cat:"pack",tag:"buyer",t:"Signed declarations (anti-bribery, conflict of interest, code of conduct)",
+   why:"Large buyers usually have their own forms. Read them properly before signing.",
+   next:"Get the buyer's supplier code and declaration forms, read them, and have your authorised signatory sign them."},
+  {id:"iso",cat:"pack",tag:"buyer",t:"ISO certification (e.g. ISO 9001, 45001, 14001)",
+   why:"Rarely expected from small contractors, but some buyers score it.",
+   next:"Do not rush into certification. Ask whether the buyer requires it or only gives extra points for it."},
+  {id:"consistent",cat:"pack",tag:"common",t:"Same company name, address and contacts on every document",
+   why:"Small differences, like Ltd and Limited, or an old address, cause delays when buyers compare documents.",
+   next:"Check that your name, address and directors match across PACRA, ZRA, bank and other documents, and fix any mismatch at its source."},
+  {id:"scans",cat:"pack",tag:"common",t:"Every document scanned, named and ready as one PDF",
+   why:"Much registration is now online, and some buyers want everything in one file. Clear colour scans with plain names prevent rejections.",
+   next:"Scan each document in colour, give it a plain name such as 'Tax Clearance 2026.pdf', note its expiry date, and combine them into one PDF pack."}
+];
+
+
+var SHORT = {co:"Company",tax:"Tax & statutory",sec:"Sector",she:"Safety",ins:"Insurance",fin:"Finance",cap:"Capability",pack:"Document pack"};
+var LABELS = {yes:"Yes", prog:"In progress", no:"No", na:"Not relevant"};
+var ICONS = {
+  yes:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  prog:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>',
+  no:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>',
+  na:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>',
+  wa:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>',
+  copy:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>',
+  back:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+  next:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>'
+};
+var STORE_KEY = "srrc-v1";
+var STEPS = ["intro"]; CATS.forEach(function(c){ STEPS.push(c.id); }); STEPS.push("results");
+var state = {}, company = "", cur = 0;
+
+function load(){ try{ var raw = localStorage.getItem(STORE_KEY); if(raw){ var d = JSON.parse(raw); state = d.state || {}; company = d.company || ""; cur = Math.min(Math.max(d.step|0,0),STEPS.length-1); } }catch(e){} }
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify({state:state, company:company, step:cur})); }catch(e){} }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+function $(id){ return document.getElementById(id); }
+function tagHTML(tag){ return tag==="common" ? '<span class="tag common">Commonly required</span>' : '<span class="tag buyer">Check with the buyer</span>'; }
+function itemsOf(cat){ return ITEMS.filter(function(i){ return i.cat===cat; }); }
+function catName(id){ for(var k=0;k<CATS.length;k++) if(CATS[k].id===id) return CATS[k].name; return ""; }
+function answeredIn(cat){ return itemsOf(cat).filter(function(i){ return !!state[i.id]; }).length; }
+
+function compute(){
+  var r = {pts:0,max:0,yes:0,prog:0,no:0,na:0,open:0,total:ITEMS.length,blockers:[],missing:[],progress:[]};
+  ITEMS.forEach(function(i){
+    var s = state[i.id], w = i.tag==="common" ? 2 : 1;
+    if(s==="na"){ r.na++; return; }
+    r.max += w;
+    if(s==="yes"){ r.yes++; r.pts += w; }
+    else if(s==="prog"){ r.prog++; r.pts += w/2; r.progress.push(i); }
+    else if(s==="no"){ r.no++; r.missing.push(i); if(i.tag==="common") r.blockers.push(i); }
+    else r.open++;
+  });
+  r.pct = r.max ? Math.round(r.pts / r.max * 100) : 0;
+  r.answered = r.yes + r.prog + r.no + r.na;
+  if(r.answered===0) r.band = "Not started";
+  else if(r.pct===100) r.band = "Ready to apply";
+  else if(r.pct>=80) r.band = "Nearly ready";
+  else if(r.pct>=50) r.band = "Getting there";
+  else r.band = "Not ready yet";
+  var sort = function(a,b){ return (a.tag==="common"?0:1) - (b.tag==="common"?0:1); };
+  r.missing.sort(sort); r.progress.sort(sort);
+  return r;
+}
+function ringClass(r){ return r.answered===0 ? "s-none" : r.pct>=80 ? "s-high" : r.pct>=50 ? "s-mid" : "s-low"; }
+function ring(r,size,stroke){
+  var c = size/2, rad = (size-stroke)/2, len = 2*Math.PI*rad, off = len*(1-r.pct/100);
+  return '<svg class="ring '+ringClass(r)+'" width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" aria-hidden="true">'
+    + '<circle class="track" cx="'+c+'" cy="'+c+'" r="'+rad+'" fill="none" stroke-width="'+stroke+'"/>'
+    + '<circle class="val" cx="'+c+'" cy="'+c+'" r="'+rad+'" fill="none" stroke-width="'+stroke+'" stroke-linecap="round" stroke-dasharray="'+len.toFixed(2)+'" stroke-dashoffset="'+off.toFixed(2)+'" transform="rotate(-90 '+c+' '+c+')"/></svg>';
+}
+
+/* ---------- chrome ---------- */
+function renderTop(){
+  var r = compute();
+  $("miniScore").innerHTML = ring(r,34,5) + '<span class="pct">'+r.pct+'%</span>';
+  $("topSub").textContent = company ? company : "Supplier registration, Zambia";
+  var h = "";
+  CATS.forEach(function(c,k){
+    var n = itemsOf(c.id).length, a = answeredIn(c.id), cls = a===0 ? "" : a===n ? " done" : " part";
+    h += '<button type="button" class="chip'+cls+'" data-step="'+(k+1)+'"'+(cur===k+1?' aria-current="step"':'')+'><span class="dot"></span>'+esc(SHORT[c.id])+'</button>';
+  });
+  h += '<button type="button" class="chip res" data-step="'+(STEPS.length-1)+'"'+(cur===STEPS.length-1?' aria-current="step"':'')+'>Results</button>';
+  $("chips").innerHTML = h;
+  $("chips").hidden = (cur===0);
+  var on = $("chips").querySelector('[aria-current="step"]');
+  if(on && on.scrollIntoView){ try{ on.scrollIntoView({block:"nearest",inline:"center"}); }catch(e){} }
+}
+function renderBottom(){
+  var step = STEPS[cur], b = $("bottom");
+  if(step==="intro" || step==="results"){ b.hidden = true; return; }
+  b.hidden = false;
+  $("backBtn").innerHTML = ICONS.back + '<span>Back</span>';
+  var nxt = STEPS[cur+1];
+  $("nextBtn").innerHTML = '<span>' + (nxt==="results" ? "See my results" : "Next: " + esc(SHORT[nxt])) + '</span>' + ICONS.next;
+}
+
+/* ---------- screens ---------- */
+function introHTML(){
+  var r = compute(), started = r.answered > 0;
+  return '<section class="screen">'
+   + '<div class="hero"><span class="eyebrow">Free tool for Zambian contractors and suppliers</span>'
+   + '<h1>Supplier Registration Readiness Checklist</h1>'
+   + '<p class="lede">Go through your documents one section at a time. Mark each one Yes, In progress or No. At the end you get a readiness score, a list of what is missing and what to do next for each gap.</p></div>'
+   + '<div class="facts"><span class="fact"><b>'+ITEMS.length+'</b> items</span><span class="fact"><b>'+CATS.length+'</b> sections</span><span class="fact">Answers stay on your phone</span></div>'
+   + '<p class="warn"><b>A preparation guide, not an official list.</b> Every buyer sets its own requirements, and they change. Confirm the exact list with the buyer\'s procurement team before you submit.</p>'
+   + '<div class="panel"><div class="field"><label for="company">Company name</label><input id="company" type="text" autocomplete="organization" placeholder="e.g. Your Company Limited" value="'+esc(company)+'"><small>Optional. Shown on your results.</small></div>'
+   + '<div class="legend"><div><span class="tag common">Commonly required</span><span>Most buyers ask for it.</span></div><div><span class="tag buyer">Check with the buyer</span><span>Depends on the buyer or the work you do.</span></div></div></div>'
+   + '<div class="row">'
+   + (started
+      ? '<button class="btn primary block" type="button" data-go="resume">Continue ('+r.answered+' of '+r.total+' answered)'+ICONS.next+'</button><button class="btn quiet" type="button" data-go="results">See results so far</button>'
+      : '<button class="btn primary block" type="button" data-go="1">Start the checklist'+ICONS.next+'</button>')
+   + '</div></section>';
+}
+function catHTML(k){
+  var c = CATS[k-1], items = itemsOf(c.id), a = answeredIn(c.id);
+  var h = '<section class="screen"><div class="step-head"><div class="step-meta"><span class="eyebrow">Section '+k+' of '+CATS.length+'</span><span class="answered" id="ansCount">'+a+' of '+items.length+' answered</span></div>'
+    + '<h2>'+esc(c.name)+'</h2><p class="lede">'+esc(c.intro)+'</p><div class="bar"><i id="ansBar" style="width:'+(a/items.length*100)+'%"></i></div></div><ul class="items">';
+  items.forEach(function(i){
+    var opts = i.na ? ["yes","prog","no","na"] : ["yes","prog","no"];
+    h += '<li class="item"><div class="item-head">'+tagHTML(i.tag)+'<h3>'+esc(i.t)+'</h3></div><fieldset class="ans'+(i.na?' four':'')+'"><legend>'+esc(i.t)+'</legend>';
+    opts.forEach(function(o){
+      var rid = "r-"+i.id+"-"+o;
+      h += '<input type="radio" name="'+i.id+'" id="'+rid+'" value="'+o+'"'+(state[i.id]===o?' checked':'')+'><label for="'+rid+'">'+ICONS[o]+LABELS[o]+'</label>';
+    });
+    h += '</fieldset><details><summary>What is this?</summary><p>'+esc(i.why)+'</p></details></li>';
+  });
+  return h + '</ul></section>';
+}
+function gapHTML(i, kind){
+  return '<div class="gap"><span class="ic">'+ICONS[kind]+'</span><div class="gap-t">'+esc(i.t)+'</div>'
+    + '<div class="gap-c">'+tagHTML(i.tag)+'<span>'+esc(SHORT[i.cat])+'</span></div>'
+    + '<p class="gap-n"><b>Next:</b> '+esc(i.next)+'</p></div>';
+}
+function firstOpenStep(){ for(var k=0;k<CATS.length;k++){ if(answeredIn(CATS[k].id) < itemsOf(CATS[k].id).length) return k+1; } return 1; }
+function resultsHTML(){
+  var r = compute(), h = '<section class="screen">';
+  h += '<div class="panel score"><div class="score-ring">'+ring(r,176,14)+'<div class="num"><b>'+r.pct+'%</b><small>ready</small></div></div>'
+     + '<p class="band">'+esc(r.band)+'</p><p class="sub">'+(company?esc(company)+' &middot; ':'')+r.answered+' of '+r.total+' answered</p></div>';
+  h += '<div class="counts"><div class="count c-yes"><b>'+r.yes+'</b>Ready</div><div class="count c-prog"><b>'+r.prog+'</b>In progress</div><div class="count c-no"><b>'+r.no+'</b>Missing</div><div class="count c-open"><b>'+r.open+'</b>Unanswered</div></div>';
+  if(r.blockers.length) h += '<p class="blocker"><b>'+r.blockers.length+' commonly required '+(r.blockers.length===1?'item is':'items are')+' missing.</b> Most buyers will not accept a registration without '+(r.blockers.length===1?'it':'these')+', so start there.</p>';
+  if(r.answered===0){
+    h += '<div class="panel"><p class="empty">You have not answered anything yet. Your gaps and next steps will show here.</p><button class="btn primary" type="button" data-go="1">Start the checklist'+ICONS.next+'</button></div>';
+  } else {
+    if(r.missing.length){ h += '<div class="gap-group g-no"><h3>Missing <span class="pill">'+r.missing.length+'</span></h3>'; r.missing.forEach(function(i){ h += gapHTML(i,"no"); }); h += '</div>'; }
+    if(r.progress.length){ h += '<div class="gap-group g-prog"><h3>In progress <span class="pill">'+r.progress.length+'</span></h3>'; r.progress.forEach(function(i){ h += gapHTML(i,"prog"); }); h += '</div>'; }
+    if(!r.missing.length && !r.progress.length) h += '<p class="panel empty">No gaps among the items you answered.</p>';
+    if(r.open) h += '<div class="panel"><p class="empty">'+r.open+' item'+(r.open===1?' is':'s are')+' unanswered and count as zero in your score.</p><button class="btn outline" type="button" data-go="open">Answer the rest'+ICONS.next+'</button></div>';
+  }
+  h += '<p class="method">How the score works: Yes counts in full, In progress counts half, No counts zero. Commonly required items count double. Items marked Not relevant are left out.</p>';
+  h += '<div class="panel"><div class="row"><button class="btn primary" id="copyBtn" type="button">'+ICONS.copy+'Copy my results</button>'
+     + '<a class="btn outline" id="waShare" href="https://wa.me/?text='+encodeURIComponent(resultsText(r))+'" target="_blank" rel="noopener">'+ICONS.wa+'Send on WhatsApp</a></div>'
+     + '<p class="status" id="copyStatus" role="status"></p><textarea id="fallback" hidden readonly aria-label="Your results as text"></textarea>'
+     + '<div class="row"><button class="btn quiet" id="resetBtn" type="button">Clear all answers</button></div>'
+     + '<div class="confirm" id="confirmReset" hidden><span>Clear all answers on this phone?</span><button class="btn quiet" id="resetYes" type="button">Yes, clear</button><button class="btn quiet" id="resetNo" type="button">Cancel</button></div></div>';
+  var num = CONFIG.whatsapp.replace(/\D/g,""), who = CONFIG.brand ? CONFIG.brand + " (" + CONFIG.name + ")" : CONFIG.name;
+  h += '<div class="cta"><span class="eyebrow">Need help?</span><h2>Want us to prepare your registration pack?</h2>'
+     + '<p>We help small Zambian contractors and suppliers gather, check and organise their documents for supplier registration and tenders.</p>'
+     + '<div class="contact">Contact '+esc(who)+' on WhatsApp: '+(num ? '+'+num : '[WhatsApp number]')+'</div>'
+     + (num ? '<a class="btn primary" href="https://wa.me/'+num+'?text='+encodeURIComponent("Hi "+CONFIG.name.split(" ")[0]+", I used the Supplier Registration Readiness Checklist and would like help preparing my registration pack.")+'" target="_blank" rel="noopener">'+ICONS.wa+'Message '+esc(CONFIG.name.split(" ")[0])+' on WhatsApp</a>' : '')
+     + '</div>';
+  h += '<footer><p>A general preparation guide for Zambia, last reviewed October 2026. Not legal, tax or financial advice.</p><p>Regulators, certificates and rules change. Check current requirements with the issuing body (PACRA, ZRA, NAPSA, NHIMA, WCFCB, NCC and others) and with the buyer.</p></footer>';
+  return h + '</section>';
+}
+function resultsText(r){
+  r = r || compute();
+  var L = ["*Supplier Registration Readiness*"];
+  if(company) L.push("Company: " + company);
+  L.push("Score: *" + r.pct + "%* (" + r.band + ")");
+  L.push("Ready: " + r.yes + " | In progress: " + r.prog + " | Missing: " + r.no + (r.open ? " | Unanswered: " + r.open : ""));
+  if(r.missing.length){ L.push("", "*Missing*"); r.missing.forEach(function(i){ L.push("- " + i.t + (i.tag==="common" ? " (commonly required)" : "")); L.push("  Next: " + i.next); }); }
+  if(r.progress.length){ L.push("", "*In progress*"); r.progress.forEach(function(i){ L.push("- " + i.t); L.push("  Next: " + i.next); }); }
+  L.push("", "_Preparation guide only, not an official requirements list. Confirm the exact list with the buyer._");
+  if(/^https?:$/.test(location.protocol)) L.push("Free checklist: " + location.href.split("#")[0]);
+  return L.join("\n");
+}
+
+function go(n, focus){
+  cur = Math.min(Math.max(n,0), STEPS.length-1); save();
+  var step = STEPS[cur];
+  $("main").innerHTML = step==="intro" ? introHTML() : step==="results" ? resultsHTML() : catHTML(cur);
+  renderTop(); renderBottom();
+  window.scrollTo(0,0);
+  if(focus) $("main").focus({preventScroll:true});
+  $("live").textContent = step==="intro" ? "Start" : step==="results" ? "Results" : "Section " + cur + ": " + catName(step);
+}
+
+function onAnswer(t){
+  state[t.name] = t.value; save();
+  var cat = STEPS[cur], items = itemsOf(cat), a = answeredIn(cat);
+  if($("ansCount")) $("ansCount").textContent = a + " of " + items.length + " answered";
+  if($("ansBar")) $("ansBar").style.width = (a/items.length*100) + "%";
+  renderTop();
+}
+
+function copyResults(){
+  var text = resultsText(), st = $("copyStatus"), fb = $("fallback");
+  function fallback(){ fb.hidden = false; fb.value = text; fb.focus(); fb.select(); st.className = "status err"; st.textContent = "Copy did not work here. Your results are selected below. Copy them, then paste into WhatsApp."; }
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ fb.hidden = true; st.className = "status"; st.textContent = "Copied. Paste it into any WhatsApp chat."; }, fallback);
+    } else fallback();
+  }catch(e){ fallback(); }
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click", function(e){
+  var el = e.target.closest ? e.target.closest("[data-step],[data-go],button") : null;
+  if(!el) return;
+  if(el.hasAttribute("data-step")){ go(+el.getAttribute("data-step"), true); return; }
+  if(el.hasAttribute("data-go")){
+    var g = el.getAttribute("data-go");
+    if(g==="results") go(STEPS.length-1, true);
+    else if(g==="resume" || g==="open") go(firstOpenStep(), true);
+    else go(+g, true);
+    return;
+  }
+  switch(el.id){
+    case "miniScore": go(STEPS.length-1, true); break;
+    case "backBtn": go(cur-1, true); break;
+    case "nextBtn": go(cur+1, true); break;
+    case "copyBtn": copyResults(); break;
+    case "resetBtn": $("confirmReset").hidden = false; break;
+    case "resetNo": $("confirmReset").hidden = true; break;
+    case "resetYes": state = {}; go(0, true); break;
+  }
+});
+document.addEventListener("change", function(e){ var t = e.target; if(t.type==="radio" && t.name) onAnswer(t); });
+document.addEventListener("input", function(e){ if(e.target.id==="company"){ company = e.target.value.trim(); save(); renderTop(); } });
+
+load();
+go(cur, false);
+</script>
+</body>
+</html>
